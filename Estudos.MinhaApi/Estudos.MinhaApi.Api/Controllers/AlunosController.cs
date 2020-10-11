@@ -50,6 +50,45 @@ namespace Estudos.MinhaApi.Api.Controllers
             }
         }
 
-        
+        public IHttpActionResult Put(int? id, [FromBody]Aluno aluno)
+        {
+            try
+            {
+                if (!id.HasValue)
+                {
+                    return BadRequest();
+                }
+                aluno.Id = id.Value;
+                _repositorioAlunos.Atualizar(aluno);
+                return Ok();
+
+            } catch(Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
+        public IHttpActionResult Delete(int? id)
+        {
+            try
+            {
+                if (!id.HasValue)
+                {
+                    return BadRequest();
+                }
+                Aluno aluno = _repositorioAlunos.SelecionarPorId(id.Value);
+                if(aluno == null)
+                {
+                    return NotFound();
+                }
+                _repositorioAlunos.ExcluirProID(id.Value);
+                return Ok();
+                         }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
     }
 }
