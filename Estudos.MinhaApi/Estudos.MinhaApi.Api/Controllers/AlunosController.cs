@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
 using Estudos.Comum.Repositorios.Interfaces;
 using Estudos.MinhaApi.AcessoDados.Entity.Context;
@@ -17,24 +18,38 @@ namespace Estudos.MinhaApi.Api.Controllers
         private IRepositorioEstudos<Aluno, int> _repositorioAlunos 
             = new RepositorioAlunos(new MinhaApiDbContext());
 
-        public IEnumerable<Aluno> Get()
+        public IHttpActionResult Get()
         {
-            return _repositorioAlunos.Selecionar();
+            return Ok(_repositorioAlunos.Selecionar());
         }
 
-        public HttpResponseMessage Get(int? id)
+        public IHttpActionResult Get(int? id)
         {
             if (!id.HasValue)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest);
+                return BadRequest();
             }
             Aluno aluno = _repositorioAlunos.SelecionarPorId(id.Value);
             if(aluno == null)
             {
-                return Request.CreateResponse(HttpStatusCode.NotFound);
+                return NotFound();
             }
-            return Request.CreateResponse(HttpStatusCode.Found, aluno);
+            return Content(HttpStatusCode.Found, aluno);
         }
 
+        public IHttpActionResult Post([FromBody]Aluno aluno)
+        {
+            try
+            {
+                _repositorioAlunos.Inserir(aluno);
+                return Created($"{Request.RequestUri}/{aluno.Id}", aluno);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
+        
     }
 }
