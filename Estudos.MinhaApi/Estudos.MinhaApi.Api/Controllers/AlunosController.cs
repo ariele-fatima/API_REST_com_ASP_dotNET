@@ -22,9 +22,18 @@ namespace Estudos.MinhaApi.Api.Controllers
             return _repositorioAlunos.Selecionar();
         }
 
-        public Aluno Get(int? id)
+        public HttpResponseMessage Get(int? id)
         {
-            return _repositorioAlunos.SelecionarPorId(id.Value);
+            if (!id.HasValue)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+            Aluno aluno = _repositorioAlunos.SelecionarPorId(id.Value);
+            if(aluno == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+            return Request.CreateResponse(HttpStatusCode.Found, aluno);
         }
 
     }
