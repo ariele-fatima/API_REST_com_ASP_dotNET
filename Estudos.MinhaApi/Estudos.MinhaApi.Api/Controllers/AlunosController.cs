@@ -8,8 +8,12 @@ using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
 using Estudos.Comum.Repositorios.Interfaces;
 using Estudos.MinhaApi.AcessoDados.Entity.Context;
+using Estudos.MinhaApi.Api.AutoMapper;
+using Estudos.MinhaApi.Api.DTOs;
+using Estudos.MinhaApi.Api.Filters;
 using Estudos.MinhaApi.Dominio;
 using Estudos.MinhaApi.Repositorios.Entity;
+using Microsoft.Ajax.Utilities;
 
 namespace Estudos.MinhaApi.Api.Controllers
 {
@@ -20,7 +24,9 @@ namespace Estudos.MinhaApi.Api.Controllers
 
         public IHttpActionResult Get()
         {
-            return Ok(_repositorioAlunos.Selecionar());
+            List<Aluno> alunos = _repositorioAlunos.Selecionar();
+            List<AlunoDTO> dtos = AutoMapperManager.Instance.Mapper.Map<List<Aluno>, List<AlunoDTO>>(alunos);
+            return Ok(dtos);
         }
 
         public IHttpActionResult Get(int? id)
@@ -34,13 +40,16 @@ namespace Estudos.MinhaApi.Api.Controllers
             {
                 return NotFound();
             }
-            return Content(HttpStatusCode.Found, aluno);
+            AlunoDTO dto = AutoMapperManager.Instance.Mapper.Map<Aluno, AlunoDTO>(aluno);
+            return Content(HttpStatusCode.Found, dto);
         }
 
-        public IHttpActionResult Post([FromBody]Aluno aluno)
+        [ApplyModelValidation]
+        public IHttpActionResult Post([FromBody]AlunoDTO dto)
         {
             try
             {
+                Aluno aluno = AutoMapperManager.Instance.Mapper.Map<AlunoDTO, Aluno>(dto);
                 _repositorioAlunos.Inserir(aluno);
                 return Created($"{Request.RequestUri}/{aluno.Id}", aluno);
             }
@@ -50,7 +59,8 @@ namespace Estudos.MinhaApi.Api.Controllers
             }
         }
 
-        public IHttpActionResult Put(int? id, [FromBody]Aluno aluno)
+        [ApplyModelValidation]
+        public IHttpActionResult Put(int? id, [FromBody]AlunoDTO dto)
         {
             try
             {
@@ -58,6 +68,7 @@ namespace Estudos.MinhaApi.Api.Controllers
                 {
                     return BadRequest();
                 }
+                Aluno aluno = AutoMapperManager.Instance.Mapper.Map<AlunoDTO, Aluno>(dto);
                 aluno.Id = id.Value;
                 _repositorioAlunos.Atualizar(aluno);
                 return Ok();
