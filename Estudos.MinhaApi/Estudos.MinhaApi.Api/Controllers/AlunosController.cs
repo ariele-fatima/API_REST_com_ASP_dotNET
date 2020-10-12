@@ -17,6 +17,7 @@ using Microsoft.Ajax.Utilities;
 
 namespace Estudos.MinhaApi.Api.Controllers
 {
+    [RoutePrefix("api/alunos")]
     public class AlunosController : ApiController
     {
         private IRepositorioEstudos<Aluno, int> _repositorioAlunos 
@@ -41,7 +42,15 @@ namespace Estudos.MinhaApi.Api.Controllers
                 return NotFound();
             }
             AlunoDTO dto = AutoMapperManager.Instance.Mapper.Map<Aluno, AlunoDTO>(aluno);
-            return Content(HttpStatusCode.Found, dto);
+            return Content(HttpStatusCode.OK, dto);
+        }
+
+        [Route("por-nome/{nomeAluno}")]
+        public IHttpActionResult Get(string nomeAluno)
+        {
+            List<Aluno> alunos = _repositorioAlunos.Selecionar(s => s.Nome.ToLower().Contains(nomeAluno.ToLower()));
+            List<AlunoDTO> dtos = AutoMapperManager.Instance.Mapper.Map<List<Aluno>, List<AlunoDTO>>(alunos);
+            return Ok(dtos);
         }
 
         [ApplyModelValidation]
