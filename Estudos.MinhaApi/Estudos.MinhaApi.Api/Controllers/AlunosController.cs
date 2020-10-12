@@ -17,6 +17,7 @@ using Microsoft.Ajax.Utilities;
 
 namespace Estudos.MinhaApi.Api.Controllers
 {
+    [Authorize]
     [RoutePrefix("api/alunos")]
     public class AlunosController : ApiController
     {
