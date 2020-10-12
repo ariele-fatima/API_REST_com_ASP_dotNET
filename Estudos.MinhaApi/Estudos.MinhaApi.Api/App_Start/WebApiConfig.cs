@@ -1,4 +1,5 @@
-﻿using Estudos.MinhaApi.Api.Formatters;
+﻿using Estudos.MinhaApi.Api.Filters;
+using Estudos.MinhaApi.Api.Formatters;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace Estudos.MinhaApi.Api
             config.Formatters.Add(new CsvMediaTypeFormatter());
             //var xmlFormatter = config.Formatters.XmlFormatter;
             //config.Formatters.Remove(xmlFormatter);
+            config.Filters.Add(new FillResponseWithHATEOASAttribute());
 
             // Web API routes
             config.MapHttpAttributeRoutes();
