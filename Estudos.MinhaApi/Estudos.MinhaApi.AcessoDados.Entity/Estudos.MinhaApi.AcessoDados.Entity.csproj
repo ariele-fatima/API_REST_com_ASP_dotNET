@@ -56,6 +56,10 @@
     <Compile Include="Migrations\202010070147268_CriacaoTabelaAlunos.designer.cs">
       <DependentUpon>202010070147268_CriacaoTabelaAlunos.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202010121908160_CriacaoTabelaUsuarios.cs" />
+    <Compile Include="Migrations\202010121908160_CriacaoTabelaUsuarios.designer.cs">
+      <DependentUpon>202010121908160_CriacaoTabelaUsuarios.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -72,6 +76,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202010070147268_CriacaoTabelaAlunos.resx">
       <DependentUpon>202010070147268_CriacaoTabelaAlunos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202010121908160_CriacaoTabelaUsuarios.resx">
+      <DependentUpon>202010121908160_CriacaoTabelaUsuarios.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

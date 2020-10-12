@@ -11,6 +11,7 @@ namespace Estudos.MinhaApi.AcessoDados.Entity.Context
     public class MinhaApiDbContext : DbContext
     {
         public DbSet<Aluno> Alunos { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
 
         public MinhaApiDbContext()
         {

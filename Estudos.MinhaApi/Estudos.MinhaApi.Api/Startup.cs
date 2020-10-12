@@ -29,7 +29,7 @@ namespace Estudos.MinhaApi.Api
             {
                 AllowInsecureHttp = true, //como não temos um certificado https, vamos permitir o uso do http, mas nunca suba em produção http 
                 TokenEndpointPath = new PathString("/token"), //endpoint onde pego o token de autenticação
-                AccessTokenExpireTimeSpan = TimeSpan.FromSeconds(50), //duração do token
+                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(2), //duração do token
                 Provider = new SimpleAuthServerProvider()//onde verifica se as credencias são validas pra solicitar um token
             };
             app.UseOAuthAuthorizationServer(oAuthOptions);

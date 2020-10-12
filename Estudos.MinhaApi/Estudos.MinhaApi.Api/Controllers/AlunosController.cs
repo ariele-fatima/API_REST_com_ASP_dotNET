@@ -88,7 +88,7 @@ namespace Estudos.MinhaApi.Api.Controllers
                 return InternalServerError(ex);
             }
         }
-
+        [Authorize(Roles = "Admin")]
         public IHttpActionResult Delete(int? id)
         {
             try

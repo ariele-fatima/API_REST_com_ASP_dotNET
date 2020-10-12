@@ -1,4 +1,8 @@
-﻿using Microsoft.Owin.Security.OAuth;
+﻿using Estudos.Comum.Repositorios.Interfaces;
+using Estudos.MinhaApi.AcessoDados.Entity.Context;
+using Estudos.MinhaApi.Dominio;
+using Estudos.MinhaApi.Repositorios.Entity;
+using Microsoft.Owin.Security.OAuth;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,11 +24,17 @@ namespace Estudos.MinhaApi.Api.Providers
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
             context.OwinContext.Response.Headers.Add("Acess-Control-Allow-Origin", new string[] { "*" });
-            if(context.UserName != "estudoapi" || context.Password != "estudoapi") //para fins didáticos será colocado um usuário e senha fixos 
+
+            IRepositorioEstudos<Usuario, int> repositorioUsuario
+                = new RepositorioUsuarios(new MinhaApiDbContext());
+
+            Usuario usuario = repositorioUsuario.Selecionar().Find(x => x.Login == context.UserName && x.Senha == context.Password); ;
+            if(usuario == null)
             {
-                context.SetError("invalid_user_or_password", "Usuário e/ou senha incorretos. ");
-                return;
+                    context.SetError("invalid_user_or_password", "Usuário e/ou senha incorretos. ");
+                    return;
             }
+
             ClaimsIdentity identity = new ClaimsIdentity(context.Options.AuthenticationType);
             context.Validated(identity);
         }
